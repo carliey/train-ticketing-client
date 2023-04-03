@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import { CssBaseline } from "@mui/material";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+
 import store from "./redux/store";
 
 const root = ReactDOM.createRoot(
@@ -14,7 +16,9 @@ root.render(
   <React.StrictMode>
     <CssBaseline />
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );
