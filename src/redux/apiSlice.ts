@@ -7,10 +7,10 @@ import type {
 } from "@reduxjs/toolkit/query";
 import { logout } from "../screens/auth/authSlice";
 
-const api_url = "http://localhost/blah";
+const api_url = process.env.REACT_APP_API_URL;
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5050",
+  baseUrl: api_url,
   prepareHeaders: (headers, { getState }) => {
     // const token = (getState() as RootState).auth.token;
 

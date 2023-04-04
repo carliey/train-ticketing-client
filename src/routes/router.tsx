@@ -6,22 +6,28 @@ import {
   Navigate,
   useNavigate,
   useLocation,
+  Outlet,
 } from "react-router-dom";
-
 import { useAppDispatch } from "../redux/store";
-import { login, logout, selectCurrentUser } from "../screens/auth/authSlice";
+import { login, selectCurrentUser } from "../screens/auth/authSlice";
+import SignIn from "../screens/auth/SignIn";
+import SignUp from "../screens/auth/Signup";
+import Booking from "../screens/booking/Booking";
+import Dashboard from "../screens/dashboard/Dashboard";
+import History from "../screens/history/History";
+import Profile from "../screens/profile/Profile";
 
 type Props = {};
 
-type ProtectedRoute = {
+type ProtectedRouteType = {
   user: any;
   children?: any;
 };
 
-const ProtectedRoute = ({ user, children }: ProtectedRoute) => {
+const ProtectedRoute = ({ user, children }: ProtectedRouteType) => {
   //wrapper component for protected routes
-  const dispatch = useAppDispatch();
   const isAuth = !!user;
+  console.log(isAuth);
 
   if (!isAuth) {
     return <Navigate to="/signin" replace />;
@@ -53,17 +59,20 @@ const Router = (props: Props) => {
 
   return (
     <Routes>
-      <Route path="signin" element={<h1>signin</h1>} />
-      <Route path="signup" element={<h1>signup</h1>} />
+      <Route path="signin" element={<SignIn />} />
+      <Route path="signup" element={<SignUp />} />
 
       <Route
-        //shared pages
-        element={<ProtectedRoute user={user} />}
+        element={
+          <ProtectedRoute user={user}>
+            <Outlet />
+          </ProtectedRoute>
+        }
       >
-        <Route path="/" element={<h1>dashboard</h1>} />
-        <Route path="profile" element={<h1>profile</h1>} />
-        <Route path="history" element={<h1>history</h1>} />
-        <Route path="booking" element={<h1>booking</h1>} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="history" element={<History />} />
+        <Route path="booking" element={<Booking />} />
       </Route>
 
       <Route path="*" element={<h1>404, page not found</h1>} />
