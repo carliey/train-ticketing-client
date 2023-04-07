@@ -2,49 +2,54 @@ export interface User {
   id: any;
   name: string;
   email: string;
+  gender?: string;
+  phone?: number;
+  image?: string;
+  tickets?: Ticket[];
 }
 
-export interface Teacher {
-  id?: any;
-  firstname: string;
-  lastname: string;
-  gender: string;
-  phone: number;
-  email: string;
-  roles?: string[];
-  password?: string;
-  classroom?: Classroom[];
-}
-
-export interface Student {
+export interface Classification {
   id?: number;
-  firstname: string;
-  lastname: string;
-  gender: string;
-  middlename?: string;
-  classroom_id: number;
-  soo: string;
-  dob: string;
+  name: string;
+  seats?: Seat[];
 }
 
-export interface Classroom {
-  created_at?: string;
-  id?: any;
+export interface Station {
+  id: number;
   name: string;
-  teacher_id: number;
-  subjects?: Subject[];
+  arrivals: Schedule[];
+  depatures: Schedule[];
 }
 
-export interface Subject {
-  id?: any;
-  created_at?: string;
-  name: string;
-  description?: string;
+export interface Schedule {
+  id: number;
+  seats: Seat[];
+  is_open: Boolean;
+  depature_station: Station;
+  depature_station_id: number;
+  arrival_station: Station;
+  arrival_station_id: number;
+  departure_date: string;
+  arrival_date: string;
+  depature_time: string;
+  arrival_time: string;
 }
-export interface Attendance {
-  id?: any;
-  date: string | DateConstructor | Date;
-  is_present: boolean;
-  classroom_id: number;
-  student_id: number | undefined;
+export interface Seat {
+  id: number;
+  name: string;
+  price: DoubleRange;
+  classification: Classification;
+  classification_id: number;
+  schedule: Schedule;
+  is_booked: Boolean;
+  ticket?: Ticket;
+}
+export interface Ticket {
+  id: number;
+  transaction_id: string;
+  reference_id: string;
+  user: User;
+  user_id: number;
+  seat: Seat;
+  seat_id: number;
 }
