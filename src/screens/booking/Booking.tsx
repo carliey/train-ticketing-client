@@ -10,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
   Button,
+  Stack,
 } from "@mui/material";
 
 import { RemoveCircle } from "@mui/icons-material";
@@ -23,24 +24,30 @@ import {
   selectTotalPrice,
 } from "./bookingSlice";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const Booking = (props: Props) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const selectedSeats = useSelector(selectSelectedSeats);
   const totalPrice = useSelector(selectTotalPrice);
-  const [schedule, setSelectedSchedule] = React.useState("");
+  const [selectedScheduleId, setSelectedScheduleId] = React.useState("");
 
   const handleChangeSchedule = (event: SelectChangeEvent) => {
-    setSelectedSchedule(event.target.value);
+    setSelectedScheduleId(event.target.value);
   };
 
   const handleSelectSeat = (event: SelectChangeEvent) => {
     const selected = seats.find(
       (seat) => seat.id === parseInt(event.target.value)
     );
-    dispatch(addSeat(selected));
+    if (selectedSeats.length === 2) {
+      alert("You can only select a maximun of two tickets");
+    } else {
+      dispatch(addSeat(selected));
+    }
   };
 
   const handleRemoveSeat = (seat: Seat) => {
@@ -49,20 +56,16 @@ const Booking = (props: Props) => {
   };
 
   return (
-    <Box sx={{ backgroundColor: "red", height: "100vh" }}>
+    <>
       <PageHeader title="Booking" />
       <Box
         sx={{
-          px: 2,
-          py: 4,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          backgroundColor: "white",
-          height: "100%",
-
+          p: 2,
           "& .seats-container": {
             borderColor: "#f3f3f3",
+          },
+          "& > *": {
+            my: 1.2,
           },
         }}
       >
@@ -75,7 +78,7 @@ const Booking = (props: Props) => {
           <Typography>Select Schedule</Typography>
           <Select
             size="medium"
-            value={schedule}
+            value={selectedScheduleId}
             onChange={handleChangeSchedule}
             displayEmpty
           >
@@ -137,17 +140,35 @@ const Booking = (props: Props) => {
             TOTAL: <strong>₦{totalPrice.toFixed(2)}</strong>
           </Typography>
         </fieldset>
+      </Box>
+      <Stack
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          p: 2,
+        }}
+      >
         <Button
-          sx={{ justifySelf: "flex-end" }}
+          className="btn"
           variant="contained"
           color="success"
           fullWidth
           size="large"
+          onClick={() =>
+            navigate("/payment", {
+              state: {
+                schedule: schedules?.find(
+                  (item) => item.id === parseInt(selectedScheduleId)
+                ),
+              },
+            })
+          }
         >
           Proceed To Payment
         </Button>
-      </Box>
-    </Box>
+      </Stack>
+    </>
   );
 };
 

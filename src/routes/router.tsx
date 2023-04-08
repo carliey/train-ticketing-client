@@ -13,6 +13,7 @@ import { login, selectCurrentUser } from "../screens/auth/authSlice";
 import SignIn from "../screens/auth/SignIn";
 import SignUp from "../screens/auth/Signup";
 import Booking from "../screens/booking/Booking";
+import Payment from "../screens/booking/Payment";
 import Dashboard from "../screens/dashboard/Dashboard";
 import History from "../screens/history/History";
 import Profile from "../screens/profile/Profile";
@@ -73,6 +74,7 @@ const Router = (props: Props) => {
         <Route path="profile" element={<Profile />} />
         <Route path="history" element={<History />} />
         <Route path="booking" element={<Booking />} />
+        <Route path="payment" element={<Payment />} />
       </Route>
 
       <Route path="*" element={<h1>404, page not found</h1>} />
