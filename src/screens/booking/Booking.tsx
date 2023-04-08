@@ -13,14 +13,39 @@ import {
 } from "@mui/material";
 
 import { RemoveCircle } from "@mui/icons-material";
+import { schedules, seats } from "../../data/data";
+import { Schedule, Seat } from "../../types/types";
+import { useAppDispatch } from "../../redux/store";
+import {
+  addSeat,
+  removeSeat,
+  selectSelectedSeats,
+  selectTotalPrice,
+} from "./bookingSlice";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
 const Booking = (props: Props) => {
-  const [age, setAge] = React.useState("");
+  const dispatch = useAppDispatch();
+  const selectedSeats = useSelector(selectSelectedSeats);
+  const totalPrice = useSelector(selectTotalPrice);
+  const [schedule, setSelectedSchedule] = React.useState("");
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+  const handleChangeSchedule = (event: SelectChangeEvent) => {
+    setSelectedSchedule(event.target.value);
+  };
+
+  const handleSelectSeat = (event: SelectChangeEvent) => {
+    const selected = seats.find(
+      (seat) => seat.id === parseInt(event.target.value)
+    );
+    dispatch(addSeat(selected));
+  };
+
+  const handleRemoveSeat = (seat: Seat) => {
+    console.log("remove");
+    dispatch(removeSeat(seat));
   };
 
   return (
@@ -37,8 +62,6 @@ const Booking = (props: Props) => {
           height: "100%",
 
           "& .seats-container": {
-            height: "120px",
-            minHeight: "220px",
             borderColor: "#f3f3f3",
           },
         }}
@@ -50,24 +73,39 @@ const Booking = (props: Props) => {
 
         <FormControl fullWidth>
           <Typography>Select Schedule</Typography>
-          <Select size="medium" value={age} onChange={handleChange}>
+          <Select
+            size="medium"
+            value={schedule}
+            onChange={handleChangeSchedule}
+            displayEmpty
+          >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Abuja - Kaduna 2:30</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {schedules?.map((schedule: Schedule) => (
+              <MenuItem value={schedule.id}>
+                {` ${schedule.depature_station.name} - ${schedule.arrival_station.name} -
+                ${schedule.depature_time}`}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <FormControl fullWidth>
           <Typography>Select Seat(s)</Typography>
-          <Select size="medium" value={age} onChange={handleChange}>
+          <Select
+            size="medium"
+            onChange={handleSelectSeat}
+            value=""
+            displayEmpty
+          >
             <MenuItem value="">
-              <em>None</em>
+              <em>Select Seat</em>
             </MenuItem>
-            <MenuItem value={10}>A5 - Business</MenuItem>
-            <MenuItem value={20}>B6 - First class</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {seats.map((seat: Seat) => (
+              <MenuItem value={seat.id}>
+                {seat.name} - {seat.classification?.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Typography>
@@ -76,35 +114,27 @@ const Booking = (props: Props) => {
         </Typography>
         <fieldset className="seats-container">
           <legend>Selected Seats</legend>
-          <Box
-            boxShadow={2}
-            sx={{
-              backgroundColor: "green",
-              color: "white",
-              display: "flex",
-              p: 2,
-              my: 2,
-            }}
-          >
-            <Typography width="50%">A1 - Business </Typography>
-            <Typography width="50%"> ₦2,500 </Typography>
-            <RemoveCircle />
-          </Box>
-          <Box
-            boxShadow={2}
-            sx={{
-              backgroundColor: "green",
-              color: "white",
-              display: "flex",
-              p: 2,
-            }}
-          >
-            <Typography width="50%">A1 - Business </Typography>
-            <Typography width="50%"> ₦2,500 </Typography>
-            <RemoveCircle />
-          </Box>
+
+          {selectedSeats?.map((seat: Seat) => (
+            <Box
+              boxShadow={2}
+              sx={{
+                backgroundColor: "green",
+                color: "white",
+                display: "flex",
+                p: 2,
+                my: 1,
+              }}
+            >
+              <Typography width="50%">
+                {seat.name} - {seat.classification?.name}
+              </Typography>
+              <Typography width="50%"> ₦{seat.price} </Typography>
+              <RemoveCircle onClick={() => handleRemoveSeat(seat)} />
+            </Box>
+          ))}
           <Typography mt={2}>
-            TOTAL: <strong>$22,000</strong>
+            TOTAL: <strong>₦{totalPrice.toFixed(2)}</strong>
           </Typography>
         </fieldset>
         <Button

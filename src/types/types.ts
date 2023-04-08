@@ -17,8 +17,8 @@ export interface Classification {
 export interface Station {
   id: number;
   name: string;
-  arrivals: Schedule[];
-  depatures: Schedule[];
+  arrivals?: Schedule[];
+  depatures?: Schedule[];
 }
 
 export interface Schedule {
@@ -30,17 +30,18 @@ export interface Schedule {
   arrival_station: Station;
   arrival_station_id: number;
   departure_date: string;
-  arrival_date: string;
+  arrival_date?: string;
   depature_time: string;
   arrival_time: string;
 }
 export interface Seat {
   id: number;
   name: string;
-  price: DoubleRange;
-  classification: Classification;
+  price: number;
+  classification?: Classification;
   classification_id: number;
-  schedule: Schedule;
+  schedule?: Schedule;
+  schedule_id: number;
   is_booked: Boolean;
   ticket?: Ticket;
 }
