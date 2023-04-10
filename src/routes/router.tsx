@@ -17,6 +17,7 @@ import Payment from "../screens/booking/Payment";
 import Dashboard from "../screens/dashboard/Dashboard";
 import History from "../screens/history/History";
 import Profile from "../screens/profile/Profile";
+import TicketDetails from "../screens/history/TicketDetails";
 
 type Props = {};
 
@@ -73,6 +74,7 @@ const Router = (props: Props) => {
         <Route path="/" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route path="history" element={<History />} />
+        <Route path="ticket" element={<TicketDetails />} />
         <Route path="booking" element={<Booking />} />
         <Route path="payment" element={<Payment />} />
       </Route>
