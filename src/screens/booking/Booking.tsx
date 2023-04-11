@@ -65,7 +65,7 @@ const Booking = (props: Props) => {
             borderColor: "#f3f3f3",
           },
           "& > *": {
-            my: 1.2,
+            my: 0.6,
           },
         }}
       >
@@ -125,7 +125,7 @@ const Booking = (props: Props) => {
                 backgroundColor: "green",
                 color: "white",
                 display: "flex",
-                p: 2,
+                p: 1.5,
                 my: 1,
               }}
             >
