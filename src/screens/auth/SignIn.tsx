@@ -61,12 +61,22 @@ export default function SignIn() {
   }) => {
     try {
       console.log("data", data);
-      const res = await loginRequest({
-        email: data.email,
-        password: data.password,
-      }).unwrap();
-      console.log("res", res);
-      dispatch(login(res));
+      // const res = await loginRequest({
+      //   email: data.email,
+      //   password: data.password,
+      // }).unwrap();
+      // console.log("res", res);
+      dispatch(
+        login({
+          user: {
+            id: 1,
+            name: "muhammed ladan",
+            username: "khaleefa",
+            email: "mdcarliey@gmail.com",
+          },
+          token: "32dfjf9urjljfgfejrjoiejt",
+        })
+      );
     } catch (error) {
       console.log(error);
     }
