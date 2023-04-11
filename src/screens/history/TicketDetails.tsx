@@ -2,8 +2,9 @@ import React from "react";
 import PageHeader from "../../layout/PageHeader";
 import { Ticket } from "../../types/types";
 import { useLocation } from "react-router-dom";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { ArrowRightAlt } from "@mui/icons-material";
+import { QRCodeSVG } from "qrcode.react";
 
 type Props = {};
 
@@ -16,10 +17,11 @@ const TicketDetails = (props: Props) => {
   const state = location.state as CustomizedState;
   const { ticket } = state;
   console.log("state", state);
+  const qrCodeValue = `seat=${ticket.seat.name} | purchased by = ${ticket.user.email} | trip=${ticket.seat.schedule?.depature_station.name} to ${ticket.seat.schedule?.arrival_station.name}`;
   return (
     <div>
       <PageHeader title="Ticket Details" />
-      <Box sx={{ border: "1px solid black", m: 2, width: "350px", p: 3 }}>
+      <Card elevation={5} sx={{ m: 2, width: "350px", p: 3 }}>
         <Stack alignItems="center">
           <Typography>seat</Typography>
           <Typography variant="h4">A5</Typography>
@@ -48,6 +50,10 @@ const TicketDetails = (props: Props) => {
               textAlign: "left",
               fontWeight: "normal",
             },
+            "& tr": {
+              textAlign: "right",
+              fontWeight: "normal",
+            },
           }}
         >
           <tr>
@@ -67,8 +73,36 @@ const TicketDetails = (props: Props) => {
             <td>N23,212</td>
           </tr>
         </Box>
-        <Box height={50} width={50} margin="0 auto" border="3px solid black" />
-      </Box>
+        <Box display="flex" justifyContent="center">
+          <QRCodeSVG
+            value={qrCodeValue}
+            size={96}
+            bgColor={"#ffffff"}
+            fgColor={"#000000"}
+            level={"L"}
+            includeMargin={false}
+          />
+        </Box>
+      </Card>
+      <Stack
+        sx={{
+          // position: "absolute",
+          // bottom: 0,
+          width: "100%",
+          p: 2,
+        }}
+      >
+        <Button
+          className="btn"
+          variant="contained"
+          color="success"
+          fullWidth
+          size="large"
+          onClick={() => alert("feature coming soon")}
+        >
+          Download
+        </Button>
+      </Stack>
     </div>
   );
 };
