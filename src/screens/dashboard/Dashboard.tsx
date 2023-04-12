@@ -27,7 +27,7 @@ const Dashboard = (props: Props) => {
         }}
       >
         <Stack direction={"row"} alignItems="center" gap={1}>
-          <Avatar />
+          <Avatar onClick={() => navigate("profile")} />
           <Stack>
             <Typography fontSize={10} fontStyle={"italic"}>
               Welcome
@@ -35,9 +35,6 @@ const Dashboard = (props: Props) => {
             <Typography fontSize={12}>John Doe</Typography>
           </Stack>
         </Stack>
-        <IconButton onClick={() => dispatch(logout())}>
-          <PowerSettingsNew />
-        </IconButton>
       </Box>
       <Stack
         sx={{

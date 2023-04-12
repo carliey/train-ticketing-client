@@ -1,9 +1,14 @@
+import { Edit } from "@mui/icons-material";
 import PageHeader from "../../layout/PageHeader";
 import { Box, Avatar, Stack, Typography, Button } from "@mui/material";
+import { useAppDispatch } from "../../redux/store";
+import { logout } from "../auth/authSlice";
 
 type Props = {};
 
 const Profile = (props: Props) => {
+  const dispatch = useAppDispatch();
+
   return (
     <div>
       <PageHeader title="Profile" />
@@ -17,11 +22,20 @@ const Profile = (props: Props) => {
           <Typography>Muhammed Ladan</Typography>
         </Stack>
         <Box>
-          <Typography
-            sx={{ backgroundColor: "green", color: "white", my: 2, p: 1 }}
+          <Stack
+            sx={{
+              backgroundColor: "green",
+              color: "white",
+              my: 2,
+              px: 2,
+              py: 1,
+            }}
+            direction="row"
+            justifyContent="space-between"
           >
-            Personal Information
-          </Typography>
+            <Typography>Personal Information</Typography>
+            <Edit />
+          </Stack>
           <Box
             component="table"
             sx={{
@@ -60,12 +74,34 @@ const Profile = (props: Props) => {
         </Box>
       </Box>
       <Stack
-        gap={1}
-        sx={{ position: "absolute", bottom: 0, width: "100%", mb: 1 }}
+        direction="row"
+        gap={2}
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          p: 2,
+        }}
       >
-        <Button variant="contained">Edit profile</Button>
-        <Button variant="contained" color="error">
+        <Button
+          className="btn"
+          variant="contained"
+          color="success"
+          fullWidth
+          size="large"
+          onClick={() => alert("feature coming soon")}
+        >
           Change Password
+        </Button>
+        <Button
+          className="btn"
+          variant="contained"
+          color="success"
+          fullWidth
+          size="large"
+          onClick={() => dispatch(logout())}
+        >
+          Log out
         </Button>
       </Stack>
     </div>
