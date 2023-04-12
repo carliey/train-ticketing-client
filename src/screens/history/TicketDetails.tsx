@@ -32,9 +32,10 @@ const TicketDetails = (props: Props) => {
     toPng(componentToPrintRef.current, { cacheBust: true })
       .then(async (dataUrl) => {
         const link = document.createElement("a");
-        link.download = "my-image-name.png";
+        const imageName = `ticket_${ticket.seat.name}_${ticket.seat_id}_${ticket.seat.schedule_id}.png`;
+        link.download = imageName;
         link.href = dataUrl;
-        //  link.click();
+        link.click();
 
         // share
         // await Share.share({
@@ -46,14 +47,21 @@ const TicketDetails = (props: Props) => {
 
         //save to file system
 
-        await Filesystem.writeFile({
-          path: "image",
+        Filesystem.writeFile({
+          path: imageName,
           data: dataUrl,
           directory: Directory.Documents,
-        });
+        })
+          .then(() => {
+            alert("image saved successfully");
+          })
+          .catch((error) => {
+            alert("Exception handled");
+          }); //end write
       })
       .catch((err) => {
         console.log(err);
+        alert("Exception handled");
       });
   }, [componentToPrintRef]);
 
