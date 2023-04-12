@@ -3,14 +3,25 @@ import PageHeader from "../../layout/PageHeader";
 import { Box, Avatar, Stack, Typography, Button } from "@mui/material";
 import { useAppDispatch } from "../../redux/store";
 import { logout } from "../auth/authSlice";
+import { useState } from "react";
+import EditProfileModal from "./EditProfileModal";
 
 type Props = {};
 
 const Profile = (props: Props) => {
   const dispatch = useAppDispatch();
 
+  const [openEditProfile, setOpenEditProfile] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
+
   return (
     <div>
+      {/* dialogs  */}
+      <EditProfileModal
+        open={openEditProfile}
+        handleClose={() => setOpenEditProfile(false)}
+      />
+      {/* end of dialogs */}
       <PageHeader title="Profile" />
       <Box
         sx={{
@@ -24,7 +35,7 @@ const Profile = (props: Props) => {
         <Box>
           <Stack
             sx={{
-              backgroundColor: "green",
+              backgroundColor: "primary.main",
               color: "white",
               my: 2,
               px: 2,
@@ -34,7 +45,7 @@ const Profile = (props: Props) => {
             justifyContent="space-between"
           >
             <Typography>Personal Information</Typography>
-            <Edit />
+            <Edit onClick={() => setOpenEditProfile(true)} />
           </Stack>
           <Box
             component="table"
@@ -75,7 +86,6 @@ const Profile = (props: Props) => {
       </Box>
       <Stack
         direction="row"
-        gap={2}
         sx={{
           position: "absolute",
           bottom: 0,
@@ -89,7 +99,8 @@ const Profile = (props: Props) => {
           color="success"
           fullWidth
           size="large"
-          onClick={() => alert("feature coming soon")}
+          onClick={() => setOpenChangePassword(true)}
+          sx={{ mr: 2 }}
         >
           Change Password
         </Button>

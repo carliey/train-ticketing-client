@@ -36,9 +36,11 @@ const History = (props: Props) => {
         <Stack
           gap={2}
           direction="row"
+          justifyContent="space-around"
+          // flexWrap="wrap"
           sx={{
             "& >*": {
-              width: "33.33%",
+              width: "32.33%",
             },
           }}
         >
@@ -75,7 +77,7 @@ const History = (props: Props) => {
             </Select>
           </FormControl>
           <FormControl>
-            <Typography> Date</Typography>
+            <Typography>Depature Date</Typography>
             <TextField
               type="date"
               fullWidth

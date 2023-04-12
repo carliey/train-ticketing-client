@@ -11,24 +11,27 @@ import HistoryIcon from "@mui/icons-material/History";
 type Props = {};
 
 const Dashboard = (props: Props) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   return (
     <Box height="100vh" sx={{}}>
       <Box
         sx={{
-          backgroundColor: "green",
+          backgroundColor: "primary.main",
           color: "white",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           p: 2,
-          boxShadow: "1px 0.5px 0.6px 1px green",
+          py: 3,
+          boxShadow: "1px 0.5px 0.6px 1px primary.main",
         }}
       >
-        <Stack direction={"row"} alignItems="center" gap={1}>
-          <Avatar onClick={() => navigate("profile")} />
-          <Stack>
+        <Stack direction={"row"} alignItems="center">
+          <Avatar
+            sx={{ height: "50px", width: "50px" }}
+            onClick={() => navigate("profile")}
+          />
+          <Stack sx={{ mx: 2 }}>
             <Typography fontSize={10} fontStyle={"italic"}>
               Welcome
             </Typography>

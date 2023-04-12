@@ -10,12 +10,12 @@ const PageHeader = (props: Props) => {
   return (
     <Box
       sx={{
-        backgroundColor: "green",
+        backgroundColor: "primary.main",
         color: "white",
         display: "flex",
         alignItems: "center",
         p: 2,
-        boxShadow: "1px 0.5px 0.6px 1px green",
+        boxShadow: "1px 0.5px 0.6px 1px primary.main",
         "& .title": {
           textAlign: "center",
           flex: 1,
