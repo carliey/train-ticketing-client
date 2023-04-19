@@ -5,6 +5,7 @@ import { useAppDispatch } from "../../redux/store";
 import { logout } from "../auth/authSlice";
 import { useState } from "react";
 import EditProfileModal from "./EditProfileModal";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 type Props = {};
 
@@ -20,6 +21,10 @@ const Profile = (props: Props) => {
       <EditProfileModal
         open={openEditProfile}
         handleClose={() => setOpenEditProfile(false)}
+      />
+      <ChangePasswordModal
+        open={openChangePassword}
+        handleClose={() => setOpenChangePassword(false)}
       />
       {/* end of dialogs */}
       <PageHeader title="Profile" />
