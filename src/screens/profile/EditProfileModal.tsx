@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
@@ -6,6 +5,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { User } from "../../types/types";
 
 type Props = {
   open: boolean;
@@ -13,32 +15,98 @@ type Props = {
 };
 
 export default function EditProfileModal(props: Props) {
+  const [values, setValues] = useState<any>({
+    name: "",
+    phone: 0,
+    gender: "",
+    email: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.currentTarget;
+    setValues((prev: any) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    const value = event.target.value as string;
+    setValues((prev: any) => ({ ...prev, gender: value }));
+  };
+
+  const handleSubmit = async () => {
+    console.log("data", values);
+  };
+
   return (
-    <React.Fragment>
-      <Dialog
-        fullWidth={true}
-        maxWidth={"sm"}
-        open={props.open}
-        onClose={props.handleClose}
-      >
-        <DialogTitle>Edit Profile</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Edit Profile Here</DialogContentText>
-          <Box
-            noValidate
-            component="form"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              m: "auto",
-              width: "fit-content",
-            }}
-          ></Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.handleClose}>Close</Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
+    <Dialog
+      fullWidth={true}
+      maxWidth={"sm"}
+      open={props.open}
+      onClose={props.handleClose}
+    >
+      <DialogTitle>Edit Profile</DialogTitle>
+      <DialogContent>
+        <Box
+          noValidate
+          component="form"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <TextField
+            fullWidth
+            variant="standard"
+            label="Name"
+            name="name"
+            value={values.name}
+            onChange={handleChange}
+          />
+          <TextField
+            variant="standard"
+            label="Email"
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+          />
+          <TextField
+            variant="standard"
+            label="Phone number"
+            name="phone"
+            value={values.phone}
+            onChange={handleChange}
+          />
+          <Select
+            name="gender"
+            label="Gender"
+            value={values.gender}
+            onChange={handleSelectChange}
+            variant="standard"
+            displayEmpty
+          >
+            <MenuItem value="" disabled>
+              select gender
+            </MenuItem>
+            <MenuItem value="male">Male</MenuItem>
+            <MenuItem value="female">Female</MenuItem>
+          </Select>
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="contained" size="small" onClick={handleSubmit}>
+          Submit
+        </Button>
+        <Button
+          size="small"
+          color="error"
+          variant="contained"
+          onClick={props.handleClose}
+        >
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
