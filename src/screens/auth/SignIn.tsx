@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useAppDispatch } from "../../redux/store";
 import { login } from "./authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useLoginMutation } from "./authApiSlice";
 import Copyright from "../../customs/Copyright";
 
@@ -115,7 +115,7 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="signup" variant="body2">
+              <Link component={RouterLink} to="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

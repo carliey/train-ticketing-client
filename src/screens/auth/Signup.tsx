@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useSignupMutation } from "./authApiSlice";
 import Copyright from "../../customs/Copyright";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function SignUp() {
         alert("An error occured");
       }
       alert("signup successfully, signin to continue");
-      navigate("signin");
+      navigate("/signin");
     } catch (error) {
       console.log(error);
     }
@@ -129,9 +129,9 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Typography onClick={() => navigate("signin")} variant="body2">
+              <Link component={RouterLink} to="/signin" variant="body2">
                 Already have an account? Sign in
-              </Typography>
+              </Link>
             </Grid>
           </Grid>
         </Box>
