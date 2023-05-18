@@ -13,15 +13,56 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useSignupMutation } from "./authApiSlice";
 import Copyright from "../../customs/Copyright";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const [signupRequest, { isLoading }] = useSignupMutation();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const name = data.get("name");
+    const email = data.get("email");
+    const password = data.get("password");
+
     console.log({
+      name: data.get("name"),
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    if (email && password && name) {
+      handleSignup({
+        name,
+        email,
+        password,
+      });
+    } else {
+      alert("all fields are required");
+    }
+  };
+
+  const handleSignup = async (data: {
+    name: FormDataEntryValue;
+    email: FormDataEntryValue;
+    password: FormDataEntryValue;
+  }) => {
+    try {
+      const res = await signupRequest({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+      console.log("res", res);
+      if (res.error) {
+        alert("An error occured");
+      }
+      alert("signup successfully, signin to continue");
+      navigate("signin");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -46,24 +87,15 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="given-name"
-                name="firstName"
+                name="name"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="name"
+                label="Full Name"
                 autoFocus
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 required
@@ -85,26 +117,21 @@ export default function SignUp() {
                 autoComplete="new-password"
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isLoading}
           >
-            Sign Up
+            {isLoading ? "Loading" : "Sign Up"}
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="signin" variant="body2">
+              <Typography onClick={() => navigate("signin")} variant="body2">
                 Already have an account? Sign in
-              </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Box>
