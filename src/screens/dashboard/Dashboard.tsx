@@ -1,16 +1,15 @@
-import React from "react";
 import { Box, Avatar, Typography, Stack, IconButton } from "@mui/material";
-import { PowerSettingsNew } from "@mui/icons-material";
-import { useAppDispatch } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../auth/authSlice";
+import { selectCurrentUser } from "../auth/authSlice";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import PersonIcon from "@mui/icons-material/Person";
 import HistoryIcon from "@mui/icons-material/History";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
 const Dashboard = (props: Props) => {
+  const user = useSelector(selectCurrentUser);
   const navigate = useNavigate();
   return (
     <Box height="100vh" sx={{}}>
@@ -35,7 +34,7 @@ const Dashboard = (props: Props) => {
             <Typography fontSize={10} fontStyle={"italic"}>
               Welcome
             </Typography>
-            <Typography fontSize={12}>John Doe</Typography>
+            <Typography fontSize={12}>{user.name || ""}</Typography>
           </Stack>
         </Stack>
       </Box>

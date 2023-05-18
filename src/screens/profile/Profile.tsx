@@ -2,15 +2,17 @@ import { Edit } from "@mui/icons-material";
 import PageHeader from "../../layout/PageHeader";
 import { Box, Avatar, Stack, Typography, Button } from "@mui/material";
 import { useAppDispatch } from "../../redux/store";
-import { logout } from "../auth/authSlice";
+import { logout, selectCurrentUser } from "../auth/authSlice";
 import { useState } from "react";
 import EditProfileModal from "./EditProfileModal";
 import ChangePasswordModal from "./ChangePasswordModal";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
 const Profile = (props: Props) => {
   const dispatch = useAppDispatch();
+  const user = useSelector(selectCurrentUser);
 
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
@@ -35,7 +37,7 @@ const Profile = (props: Props) => {
       >
         <Stack alignItems="center" justifyContent="center">
           <Avatar sx={{ height: 100, width: 100 }} />
-          <Typography>Muhammed Ladan</Typography>
+          <Typography>{user.name || ""}</Typography>
         </Stack>
         <Box>
           <Stack
@@ -63,28 +65,20 @@ const Profile = (props: Props) => {
             }}
           >
             <tr>
-              <th>Username</th>
-              <td>carliey</td>
-            </tr>
-            <tr>
               <th>Email</th>
-              <td>mcarliey@gmail.com</td>
+              <td>{user.email}</td>
             </tr>
             <tr>
               <th>Phone</th>
-              <td>08034728472</td>
+              <td>{user.phone}</td>
             </tr>
-            <tr>
-              <th>Fullname</th>
-              <td>muhammed ladan</td>
-            </tr>
-            <tr>
+            {/* <tr>
               <th>Date of birth</th>
               <td>12/12/12</td>
-            </tr>
+            </tr> */}
             <tr>
               <th>Gender</th>
-              <td>Male</td>
+              <td>{user.gender}</td>
             </tr>
           </Box>
         </Box>

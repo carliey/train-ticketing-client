@@ -15,24 +15,7 @@ import { useAppDispatch } from "../../redux/store";
 import { login } from "./authSlice";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "./authApiSlice";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="">
-        Developed by group 12
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from "../../customs/Copyright";
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
@@ -60,23 +43,15 @@ export default function SignIn() {
     password: FormDataEntryValue;
   }) => {
     try {
-      console.log("data", data);
-      // const res = await loginRequest({
-      //   email: data.email,
-      //   password: data.password,
-      // }).unwrap();
-      // console.log("res", res);
-      dispatch(
-        login({
-          user: {
-            id: 1,
-            name: "muhammed ladan",
-            username: "khaleefa",
-            email: "mdcarliey@gmail.com",
-          },
-          token: "32dfjf9urjljfgfejrjoiejt",
-        })
-      );
+      const res = await loginRequest({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+      console.log("res", res);
+      if (res.error) {
+        alert("An error occured");
+      }
+      dispatch(login(res));
     } catch (error) {
       console.log(error);
     }
@@ -129,8 +104,9 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isLoading}
           >
-            Sign In
+            {isLoading ? "Loading" : "Sign In"}
           </Button>
           <Grid container>
             <Grid item xs>
