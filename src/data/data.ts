@@ -23,6 +23,17 @@ const seats: Seat[] = [
       name: "Economy",
     },
   },
+  {
+    id: 3,
+    is_booked: false,
+    name: "A3",
+    classification_id: 1,
+    price: 2000.23,
+    schedule_id: 1,
+    classification: {
+      name: "Economy",
+    },
+  },
 ];
 
 const schedules: Schedule[] = [
@@ -46,6 +57,17 @@ const schedules: Schedule[] = [
         name: "A2",
         classification_id: 1,
         price: 3000.23,
+        schedule_id: 1,
+        classification: {
+          name: "Economy",
+        },
+      },
+      {
+        id: 3,
+        is_booked: false,
+        name: "A3",
+        classification_id: 1,
+        price: 2000.23,
         schedule_id: 1,
         classification: {
           name: "Economy",
