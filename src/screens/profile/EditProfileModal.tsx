@@ -5,9 +5,18 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { User } from "../../types/types";
+import { useUpdateProfileMutation } from "./profileApiSlice";
+import { useAppDispatch } from "../../redux/store";
+import { updateUser } from "../auth/authSlice";
 
 type Props = {
   open: boolean;
@@ -15,11 +24,13 @@ type Props = {
 };
 
 export default function EditProfileModal(props: Props) {
+  const dispatch = useAppDispatch();
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+
   const [values, setValues] = useState<any>({
     name: "",
     phone: 0,
     gender: "",
-    email: "",
   });
 
   const handleChange = (
@@ -35,7 +46,16 @@ export default function EditProfileModal(props: Props) {
   };
 
   const handleSubmit = async () => {
-    console.log("data", values);
+    try {
+      const res = await updateProfile(values).unwrap();
+      console.log(res);
+      alert(res.message || "success");
+      dispatch(updateUser(values));
+      props.handleClose();
+    } catch (error) {
+      console.log(error);
+      alert("updating profile failed");
+    }
   };
 
   return (
@@ -66,13 +86,6 @@ export default function EditProfileModal(props: Props) {
           />
           <TextField
             variant="standard"
-            label="Email"
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-          />
-          <TextField
-            variant="standard"
             label="Phone number"
             name="phone"
             value={values.phone}
@@ -95,17 +108,23 @@ export default function EditProfileModal(props: Props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" size="small" onClick={handleSubmit}>
-          Submit
-        </Button>
-        <Button
-          size="small"
-          color="error"
-          variant="contained"
-          onClick={props.handleClose}
-        >
-          Cancel
-        </Button>
+        {isLoading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <>
+            <Button variant="contained" size="small" onClick={handleSubmit}>
+              Submit
+            </Button>
+            <Button
+              size="small"
+              color="error"
+              variant="contained"
+              onClick={props.handleClose}
+            >
+              Cancel
+            </Button>
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );

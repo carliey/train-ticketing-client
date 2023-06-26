@@ -5,6 +5,9 @@ interface UsersState {
   user: any;
   token: string | null;
 }
+interface UserData {
+  user: any;
+}
 
 const initialState: UsersState = { user: null, token: null };
 
@@ -18,6 +21,10 @@ const authSlice = createSlice({
       state.user = user;
       localStorage.setItem("credentials", JSON.stringify(action.payload));
     },
+    updateUser: (state, action: PayloadAction<UserData>) => {
+      const newUser = { ...state.user, ...action.payload };
+      state.user = newUser;
+    },
     logout: (state) => {
       state.token = null;
       state.user = null;
@@ -26,7 +33,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, updateUser, logout } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;
 
