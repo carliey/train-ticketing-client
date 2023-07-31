@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import PageHeader from "../../layout/PageHeader";
 import {
   Box,
@@ -6,15 +6,14 @@ import {
   TextField,
   FormControl,
   MenuItem,
-  InputLabel,
   Select,
   SelectChangeEvent,
   Button,
   Stack,
+  LinearProgress,
 } from "@mui/material";
 
 import { RemoveCircle } from "@mui/icons-material";
-import { schedules, seats } from "../../data/data";
 import { Schedule, Seat } from "../../types/types";
 import { useAppDispatch } from "../../redux/store";
 import {
@@ -25,6 +24,10 @@ import {
 } from "./bookingSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+  useGetScheduleSeatsQuery,
+  useGetSchedulesByDateQuery,
+} from "./ticketsApiSlice";
 
 type Props = {};
 
@@ -34,6 +37,32 @@ const Booking = (props: Props) => {
   const selectedSeats = useSelector(selectSelectedSeats);
   const totalPrice = useSelector(selectTotalPrice);
   const [selectedScheduleId, setSelectedScheduleId] = React.useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+
+  console.log("date", selectedDate);
+
+  const { data: schedulesRes, isFetching: isLoadingSchedules } =
+    useGetSchedulesByDateQuery(
+      { depature_date: selectedDate },
+      { skip: !selectedDate }
+    );
+  const schedules = useMemo(() => {
+    return schedulesRes ? schedulesRes.data : [];
+  }, [schedulesRes]);
+
+  const { data: seatsRes, isFetching: isLoadingSeats } =
+    useGetScheduleSeatsQuery(
+      { schedule_id: parseInt(selectedScheduleId) },
+      { skip: !selectedScheduleId }
+    );
+
+  const seats = useMemo(() => {
+    return seatsRes ? seatsRes.data : [];
+  }, [seatsRes]);
+
+  console.log("schedule loading", isLoadingSchedules);
+  console.log("schedules", schedulesRes);
+  console.log("seats", seatsRes);
 
   const handleChangeSchedule = (event: SelectChangeEvent) => {
     setSelectedScheduleId(event.target.value);
@@ -41,7 +70,7 @@ const Booking = (props: Props) => {
 
   const handleSelectSeat = (event: SelectChangeEvent) => {
     const selected = seats.find(
-      (seat) => seat.id === parseInt(event.target.value)
+      (seat: Seat) => seat.id === parseInt(event.target.value)
     );
     if (selectedSeats.length === 2) {
       alert("You can only select a maximun of two tickets");
@@ -71,11 +100,17 @@ const Booking = (props: Props) => {
       >
         <FormControl fullWidth sx={{ mt: 2 }}>
           <Typography>Select Date</Typography>
-          <TextField type="date" size="medium" />
+          <TextField
+            type="date"
+            size="medium"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
         </FormControl>
 
         <FormControl fullWidth sx={{ mt: 2 }}>
           <Typography>Select Schedule</Typography>
+          {isLoadingSchedules && <LinearProgress />}
           <Select
             size="medium"
             value={selectedScheduleId}
@@ -159,7 +194,7 @@ const Booking = (props: Props) => {
             navigate("/payment", {
               state: {
                 schedule: schedules?.find(
-                  (item) => item.id === parseInt(selectedScheduleId)
+                  (item: Schedule) => item.id === parseInt(selectedScheduleId)
                 ),
               },
             })

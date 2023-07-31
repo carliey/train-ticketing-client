@@ -7,11 +7,12 @@ import type {
 } from "@reduxjs/toolkit/query";
 import { logout } from "../screens/auth/authSlice";
 
-const local_db_url = "http://localhost:5051";
+const local_api_url = "http://localhost:5051";
 const api_url = process.env.REACT_APP_API_URL;
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: api_url || local_db_url,
+  // baseUrl: api_url || local_api_url,
+  baseUrl: local_api_url,
   prepareHeaders: (headers, { getState }) => {
     // const token = (getState() as RootState).auth.token;
 

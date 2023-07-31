@@ -1,9 +1,10 @@
-import React from "react";
+import { useMemo } from "react";
 import PageHeader from "../../layout/PageHeader";
 import {
   Box,
   FormControl,
   InputAdornment,
+  LinearProgress,
   MenuItem,
   Paper,
   Select,
@@ -18,13 +19,19 @@ import {
   Typography,
 } from "@mui/material";
 import { Tune } from "@mui/icons-material";
-import { tickets } from "../../data/data";
 import { Ticket } from "../../types/types";
 import { Link } from "react-router-dom";
+import { useGetMyTicketsQuery } from "../booking/ticketsApiSlice";
 
 type Props = {};
 
 const History = (props: Props) => {
+  const { data, isFetching: isLoadingTickets } = useGetMyTicketsQuery();
+
+  const tickets = useMemo(() => {
+    return data ? data.data : [];
+  }, [data]);
+
   return (
     <div>
       <PageHeader title="History" />
@@ -33,6 +40,7 @@ const History = (props: Props) => {
           p: 2,
         }}
       >
+        {isLoadingTickets && <LinearProgress />}
         <Stack
           gap={2}
           direction="row"
