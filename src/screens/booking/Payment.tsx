@@ -1,23 +1,12 @@
-import React from "react";
 import PageHeader from "../../layout/PageHeader";
-import {
-  Box,
-  Typography,
-  TextField,
-  FormControl,
-  MenuItem,
-  InputLabel,
-  Select,
-  SelectChangeEvent,
-  Button,
-  Stack,
-} from "@mui/material";
-
+import { Box, Typography, Button, Stack } from "@mui/material";
 import { Schedule, Seat } from "../../types/types";
 import { useAppDispatch } from "../../redux/store";
 import { selectSelectedSeats, selectTotalPrice } from "./bookingSlice";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { usePaystackPayment } from "react-paystack";
+import { selectCurrentUser } from "../auth/authSlice";
 
 type Props = {};
 interface CustomizedState {
@@ -29,8 +18,30 @@ const Payment = (props: Props) => {
   const location = useLocation();
   const state = location.state as CustomizedState; // Type Casting, then you can get the params passed via router
   const { schedule } = state;
+  const user = useSelector(selectCurrentUser);
   const selectedSeats = useSelector(selectSelectedSeats);
   const totalPrice = useSelector(selectTotalPrice);
+
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: user.email || "email@example.com",
+    amount: totalPrice * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC || "examplepublickey",
+  };
+
+  // you can call this function anything
+  const onSuccess = async () => {
+    //store the ticket in the database
+    console.log("reference");
+  };
+
+  // you can call this function anything
+  const onClose = () => {
+    // implementation for  whatever you want to do when the Paystack dialog closed.
+    alert("transaction closed");
+  };
+
+  const initializePayment = usePaystackPayment(config);
 
   return (
     <>
@@ -93,7 +104,7 @@ const Payment = (props: Props) => {
             <Box
               boxShadow={2}
               sx={{
-                backgroundColor: "green",
+                backgroundColor: "primary.main",
                 color: "white",
                 display: "flex",
                 p: 2,
@@ -122,10 +133,11 @@ const Payment = (props: Props) => {
         <Button
           className="btn"
           variant="contained"
-          color="success"
           fullWidth
           size="large"
-          onClick={() => alert("feature coming soon")}
+          onClick={() => {
+            initializePayment(onSuccess, onClose);
+          }}
         >
           Make Payment
         </Button>

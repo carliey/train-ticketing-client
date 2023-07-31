@@ -1,5 +1,4 @@
 import { apiSlice } from "../../redux/apiSlice";
-import { User } from "../../types/types";
 
 const apiSliceWithTags = apiSlice.enhanceEndpoints({
   addTagTypes: ["Profile"],

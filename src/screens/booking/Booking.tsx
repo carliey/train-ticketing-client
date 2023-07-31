@@ -69,12 +69,12 @@ const Booking = (props: Props) => {
           },
         }}
       >
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mt: 2 }}>
           <Typography>Select Date</Typography>
           <TextField type="date" size="medium" />
         </FormControl>
 
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mt: 2 }}>
           <Typography>Select Schedule</Typography>
           <Select
             size="medium"
@@ -93,7 +93,7 @@ const Booking = (props: Props) => {
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mt: 2 }}>
           <Typography>Select Seat(s)</Typography>
           <Select
             size="medium"
@@ -111,11 +111,11 @@ const Booking = (props: Props) => {
             ))}
           </Select>
         </FormControl>
-        <Typography>
+        <Typography sx={{ mt: 2 }}>
           <strong>Note*:</strong> You can only select maximum of two tickets at
           a time
         </Typography>
-        <fieldset className="seats-container">
+        <fieldset className="seats-container" style={{ marginTop: "10px" }}>
           <legend>Selected Seats</legend>
 
           {selectedSeats?.map((seat: Seat) => (
