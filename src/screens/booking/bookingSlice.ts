@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { seats } from "../../data/data";
 import { RootState } from "../../redux/store";
-import { Seat, Ticket } from "../../types/types";
+import { Seat } from "../../types/types";
 
 const initialState: Seat[] = [];
 

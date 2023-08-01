@@ -1,12 +1,12 @@
 import PageHeader from "../../layout/PageHeader";
 import { Box, Typography, Button, Stack } from "@mui/material";
 import { Schedule, Seat } from "../../types/types";
-import { useAppDispatch } from "../../redux/store";
 import { selectSelectedSeats, selectTotalPrice } from "./bookingSlice";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { usePaystackPayment } from "react-paystack";
 import { selectCurrentUser } from "../auth/authSlice";
+import { useSaveTicketMutation } from "./ticketsApiSlice";
 
 type Props = {};
 interface CustomizedState {
@@ -14,7 +14,7 @@ interface CustomizedState {
 }
 
 const Payment = (props: Props) => {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as CustomizedState; // Type Casting, then you can get the params passed via router
   const { schedule } = state;
@@ -22,17 +22,36 @@ const Payment = (props: Props) => {
   const selectedSeats = useSelector(selectSelectedSeats);
   const totalPrice = useSelector(selectTotalPrice);
 
+  const [saveTicket] = useSaveTicketMutation();
+
+  const reference = new Date().getTime().toString();
   const config = {
-    reference: new Date().getTime().toString(),
+    reference: reference,
     email: user.email || "email@example.com",
     amount: totalPrice * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
     publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC || "examplepublickey",
   };
 
-  // you can call this function anything
-  const onSuccess = async () => {
+  const handleSaveTicket = async () => {
     //store the ticket in the database
+    try {
+      const body = {
+        reference_id: reference,
+        seat_id: selectedSeats[0].id,
+        user_id: user.id,
+        transaction_id: reference,
+      };
+      const res = saveTicket(body).unwrap;
+      console.log(res);
+      alert("ticket saved successfully");
+      navigate("/history");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onSuccess = () => {
     console.log("reference");
+    handleSaveTicket();
   };
 
   // you can call this function anything
@@ -40,6 +59,8 @@ const Payment = (props: Props) => {
     // implementation for  whatever you want to do when the Paystack dialog closed.
     alert("transaction closed");
   };
+
+  console.log(config);
 
   const initializePayment = usePaystackPayment(config);
 
@@ -102,6 +123,7 @@ const Payment = (props: Props) => {
 
           {selectedSeats?.map((seat: Seat) => (
             <Box
+              key={seat.id}
               boxShadow={2}
               sx={{
                 backgroundColor: "primary.main",

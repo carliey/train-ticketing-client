@@ -84,4 +84,5 @@ export const {
   useGetScheduleSeatsQuery,
   useGetSchedulesQuery,
   useGetStationsQuery,
+  useSaveTicketMutation,
 } = ticketsApiSlice;

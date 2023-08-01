@@ -12,7 +12,6 @@ import {
   Stack,
   LinearProgress,
 } from "@mui/material";
-
 import { RemoveCircle } from "@mui/icons-material";
 import { Schedule, Seat } from "../../types/types";
 import { useAppDispatch } from "../../redux/store";
@@ -57,7 +56,12 @@ const Booking = (props: Props) => {
     );
 
   const seats = useMemo(() => {
-    return seatsRes ? seatsRes.data : [];
+    return seatsRes
+      ? seatsRes.data.map((item: any) => ({
+          ...item,
+          price: parseFloat(item.price), //convert the float price gotten as string into number
+        }))
+      : [];
   }, [seatsRes]);
 
   console.log("schedule loading", isLoadingSchedules);
@@ -72,8 +76,8 @@ const Booking = (props: Props) => {
     const selected = seats.find(
       (seat: Seat) => seat.id === parseInt(event.target.value)
     );
-    if (selectedSeats.length === 2) {
-      alert("You can only select a maximun of two tickets");
+    if (selectedSeats.length === 1) {
+      alert("You can only select one seat at a time");
     } else {
       dispatch(addSeat(selected));
     }
@@ -83,6 +87,9 @@ const Booking = (props: Props) => {
     console.log("remove");
     dispatch(removeSeat(seat));
   };
+
+  console.log(totalPrice);
+  console.log("selectedseats", selectedSeats);
 
   return (
     <>
@@ -129,6 +136,7 @@ const Booking = (props: Props) => {
           </Select>
         </FormControl>
         <FormControl fullWidth sx={{ mt: 2 }}>
+          {isLoadingSeats && <LinearProgress />}
           <Typography>Select Seat(s)</Typography>
           <Select
             size="medium"
@@ -172,7 +180,7 @@ const Booking = (props: Props) => {
             </Box>
           ))}
           <Typography mt={2}>
-            TOTAL: <strong>₦{totalPrice.toFixed(2)}</strong>
+            TOTAL: <strong>₦{totalPrice}</strong>
           </Typography>
         </fieldset>
       </Box>
