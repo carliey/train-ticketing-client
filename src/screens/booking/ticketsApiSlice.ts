@@ -21,13 +21,13 @@ export const ticketsApiSlice = apiSliceWithTags.injectEndpoints({
     getSchedulesByDate: builder.query<any, { depature_date: string }>({
       query: (params) =>
         `/api/schedules/date?depature_date=${params.depature_date}`,
-      providesTags: ["Schedules"],
+      providesTags: ["Schedules", "Tickets", "Seats"],
     }),
     getScheduleSeats: builder.query<any, { schedule_id: number }>({
       // returns only available seats
       query: (params) =>
         `/api/seats/schedule?schedule_id=${params.schedule_id}`,
-      providesTags: ["Schedules"],
+      providesTags: ["Seats", "Schedules"],
     }),
     getMyTickets: builder.query<any, void>({
       query: () => `/api/tickets/mine`,
@@ -54,7 +54,7 @@ export const ticketsApiSlice = apiSliceWithTags.injectEndpoints({
         method: "Post",
         body: { ...values },
       }),
-      invalidatesTags: ["Seats"],
+      invalidatesTags: ["Seats", "Schedules"],
     }),
 
     saveTicket: builder.mutation<
@@ -71,7 +71,7 @@ export const ticketsApiSlice = apiSliceWithTags.injectEndpoints({
         method: "Post",
         body: { ...values },
       }),
-      invalidatesTags: ["Tickets", "Seats"],
+      invalidatesTags: ["Schedules", "Tickets", "Seats"],
     }),
   }),
 });

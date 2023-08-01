@@ -41,7 +41,7 @@ const Payment = (props: Props) => {
         user_id: user.id,
         transaction_id: reference,
       };
-      const res = saveTicket(body).unwrap;
+      const res = await saveTicket(body).unwrap;
       console.log(res);
       alert("ticket saved successfully");
       navigate("/history");
